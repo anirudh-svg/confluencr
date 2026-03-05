@@ -172,9 +172,9 @@ confluencr/
 
 ## Deploy in 5 minutes (completely free)
 
-### Step 1 — Get your free Gemini API key
+### Step 1 — Get your free GROQ API key
 
-1. Go to https://aistudio.google.com/apikey
+1. Go to **groq cloud**
 2. Click **Create API Key**
 3. Copy it — looks like `AIzaSy...`
 
@@ -201,7 +201,7 @@ Or drag-and-drop the unzipped folder into the GitHub UI.
 2. Import your `confluencr` GitHub repo
 3. Vercel auto-detects Vite — leave all settings as default
 4. Scroll to **Environment Variables**, add:
-   - **Name:** `GEMINI_API_KEY`
+   - **Name:** `GROQ_API_KEY`
    - **Value:** `AIzaSy...` (your key)
 5. Click **Deploy**
 
@@ -214,7 +214,7 @@ Live URL in ~60 seconds.
 ```bash
 npm install
 cp .env.example .env.local
-# Add your GEMINI_API_KEY to .env.local
+# Add your GROQ_API_KEY to .env.local
 npm run dev
 # http://localhost:5173
 ```
@@ -228,11 +228,9 @@ npm run dev
 | Frontend | React 18 + Vite 5 | Free |
 | Hosting + CDN | Vercel | Free |
 | Backend | Vercel Serverless Functions | Free |
-| AI Model | Google Gemini 2.0 Flash | Free (1,500 req/day) |
+| AI Model | GROQ | Free (1,500 req/day) |
 | Fonts | Google Fonts (Syne, Newsreader, DM Mono) | Free |
 
 ---
 
-## Security note
 
-Your `GEMINI_API_KEY` is stored in Vercel's encrypted environment variables. It is read server-side inside the `/api/generate` function and **never sent to the browser**. The frontend only ever calls your own `/api/generate` endpoint.
