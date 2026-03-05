@@ -1,5 +1,7 @@
 # confluencr
 
+**PRODUCTION LINK** -> https://confluencr-d92hvk2h6-anirudhs-projects-4647d71a.vercel.app/
+
 > **AI-powered brand tweet generator** — describe your brand, get 10 on-voice tweets with full creative rationale in seconds.
 
 **100% free to run** — powered by GROQ (1,500 requests/day, no credit card ever).
