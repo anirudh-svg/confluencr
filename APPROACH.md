@@ -113,7 +113,7 @@ This mix ensures the output covers the full content funnel — awareness, engage
 
 ### Architecture decision — why a backend proxy?
 
-The Gemini API key must never be exposed in frontend code. Any key in a React bundle is readable by anyone who inspects the page source. The serverless function at `/api/generate` acts as a secure proxy — the browser calls `/api/generate`, the server calls Gemini with the key from environment variables, and only the JSON result is returned to the client.
+The GROQ API key must never be exposed in frontend code. Any key in a React bundle is readable by anyone who inspects the page source. The serverless function at `/api/generate` acts as a secure proxy — the browser calls `/api/generate`, the server calls Gemini with the key from environment variables, and only the JSON result is returned to the client.
 
 ---
 
@@ -128,4 +128,4 @@ Most tweet generators produce generic, interchangeable content. Confluencr's dif
 
 ---
 
-*Built with React, Vite, Vercel, and Gemini 2.0 Flash. Approach by Confluencr.*
+*Built with React, Vite, Vercel, and GROQ. Approach by Confluencr.*
