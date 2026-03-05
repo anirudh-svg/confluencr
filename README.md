@@ -2,7 +2,7 @@
 
 > **AI-powered brand tweet generator** — describe your brand, get 10 on-voice tweets with full creative rationale in seconds.
 
-**100% free to run** — powered by Google Gemini 2.0 Flash (1,500 requests/day, no credit card ever).
+**100% free to run** — powered by GROQ (1,500 requests/day, no credit card ever).
 
 ---
 
@@ -95,9 +95,9 @@ Click "Why this?" on any tweet to see exactly why that style, tone, language, an
                              │  :generateContent
                              ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                     GOOGLE AI STUDIO                            │
+│                                              │
 │                                                                 │
-│   Gemini 2.0 Flash                                              │
+│   GROQ                                            │
 │   ─────────────────────────────────────────────────────────     │
 │   • responseMimeType: application/json  (clean JSON output)     │
 │   • temperature: 0.85  (creative but consistent)                │
@@ -127,7 +127,7 @@ Browser → POST /api/generate (brand inputs as JSON)
       │
       ▼
 Vercel Serverless Function
-  ├── reads GEMINI_API_KEY from env vars (secure)
+  ├── reads GROQ_API_KEY from env vars (secure)
   ├── constructs prompt with brand context + output schema
   └── calls Gemini 2.0 Flash
             │
