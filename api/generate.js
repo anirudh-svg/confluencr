@@ -68,8 +68,8 @@ Rules:
 - brandAlignmentScore is a number 1-5`;
 
   try {
-    // Gemini 2.0 Flash: FREE tier = 1,500 requests/day, no credit card needed
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    // Gemini 1.5 Flash: FREE tier = 1,500 requests/day, no credit card needed
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const geminiRes = await fetch(url, {
       method: 'POST',
