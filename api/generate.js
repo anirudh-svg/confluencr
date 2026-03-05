@@ -10,9 +10,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'API key not configured. Set GEMINI_API_KEY in Vercel environment variables.' });
+    return res.status(500).json({ error: 'API key not configured. Set GROQ_API_KEY in Vercel environment variables.' });
   }
 
   const { brandName, industry, objective, products, extraContext } = req.body || {};
@@ -31,7 +31,7 @@ Objective: ${objective || 'general brand presence'}
 Products/Services: ${products || 'unspecified'}
 Notes: ${extraContext || 'none'}
 
-Return EXACTLY this JSON (nothing else):
+Return EXACTLY this JSON (nothing else, no backticks, no explanation):
 {
   "brandVoice": {
     "tone": "string",
@@ -65,35 +65,46 @@ Conversational, Promotional, Witty / Meme, Informative, Inspirational, Behind-th
 Rules:
 - Each tweet under 280 characters with 1-2 hashtags inline
 - Sound like ${brandName} genuinely wrote it
-- brandAlignmentScore is a number 1-5`;
+- brandAlignmentScore is a number 1-5
+- Return raw JSON only, no markdown`;
 
   try {
-    // Gemini 1.5 Flash: FREE tier = 1,500 requests/day, no credit card needed
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-
-    const geminiRes = await fetch(url, {
+    // Groq: FREE — 14,400 requests/day, no credit card needed
+    // Models: llama-3.3-70b-versatile (best quality, free)
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.85,
-          maxOutputTokens: 4000,
-          responseMimeType: 'application/json'
-        }
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are an elite brand strategist. You always respond with valid raw JSON only — no markdown fences, no backticks, no preamble, no explanation. Just the JSON object.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.85,
+        max_tokens: 4000,
+        response_format: { type: 'json_object' }  // forces clean JSON output
       })
     });
 
-    if (!geminiRes.ok) {
-      const errData = await geminiRes.json().catch(() => ({}));
-      return res.status(geminiRes.status).json({
-        error: errData?.error?.message || `Gemini API error ${geminiRes.status}`
+    if (!groqRes.ok) {
+      const errData = await groqRes.json().catch(() => ({}));
+      return res.status(groqRes.status).json({
+        error: errData?.error?.message || `Groq API error ${groqRes.status}`
       });
     }
 
-    const data  = await geminiRes.json();
-    const raw   = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const clean = raw.replace(/^```(?:json)?\s*/, '').replace(/```\s*$/, '').trim();
+    const data   = await groqRes.json();
+    const raw    = data?.choices?.[0]?.message?.content || '';
+    const clean  = raw.replace(/^```(?:json)?\s*/, '').replace(/```\s*$/, '').trim();
     const parsed = JSON.parse(clean);
 
     if (!parsed.tweets?.length) {
